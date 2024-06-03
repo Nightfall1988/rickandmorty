@@ -27,14 +27,17 @@ export default {
         initialCharacters: {
             type: Array,
             required: true
+        },
+        initialNextPage: {
+            type: String,
+            default: null
         }
     },
     data() {
         return {
             characters: [...this.initialCharacters], // Spread the initial characters to ensure it's an array
             loading: false,
-            page: 1,
-            perPage: 10
+            nextPage: this.initialNextPage
         };
     },
     mounted() {
@@ -45,18 +48,13 @@ export default {
     },
     methods: {
         loadCharacters() {
-            if (this.loading) return;
+            if (this.loading || !this.nextPage) return;
             this.loading = true;
 
-            axios.get('/api/characters', {
-                params: {
-                    page: this.page,
-                    perPage: this.perPage
-                }
-            }).then(response => {
-                if (response.data.characters && Array.isArray(response.data.characters)) {
-                    this.characters = this.characters.concat(response.data.characters); // Correct concatenation
-                    this.page++;
+            axios.get(this.nextPage).then(response => {
+                if (response.data.results && Array.isArray(response.data.results)) {
+                    this.characters = this.characters.concat(response.data.results);
+                    this.nextPage = response.data.info.next; // Update nextPage with the next link
                     this.loading = false;
                 }
             }).catch(error => {

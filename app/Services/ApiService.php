@@ -17,14 +17,10 @@ class ApiService
 
     public function getData($request, $id = null)
     {
-        $response = $this->httpClient->get($this->url . 'character/' . $id);
+        $page = $request->input('page', 1);
+        $response = $this->httpClient->get($this->url . 'character?page=' . $page);
         $responseData = json_decode($response->getBody(), true);
     
-        $page = $request->input('page', 1);
-        $perPage = $request->input('perPage', 10);
-        $results = array_slice($responseData['results'], ($page - 1) * $perPage, $perPage);
-    
-        return ['results' => $results];
+        return $responseData;
     }
-    
 }

@@ -3,7 +3,7 @@
 @section('content')
 <div id="app">
     @if(isset($characters))
-        <character-list :initial-characters="{{ json_encode($characters) }}"></character-list>
+        <character-list :initial-characters='@json($characters)' :initial-next-page='@json($nextPage)'></character-list>
     @endif
 </div>
 @endsection
