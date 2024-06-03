@@ -15,12 +15,18 @@ class ApiService
        $this->httpClient = new \GuzzleHttp\Client();
     }
 
-    public function getData($request, $id = null)
+    public function getData($request)
     {
         $page = $request->input('page', 1);
         $response = $this->httpClient->get($this->url . 'character?page=' . $page);
         $responseData = json_decode($response->getBody(), true);
     
         return $responseData;
+    }
+
+    public function getCharacterData($id) 
+    {
+        $response = $this->httpClient->get($this->url . 'character/' . $id);
+        return json_decode($response->getBody(), true);
     }
 }

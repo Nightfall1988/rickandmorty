@@ -25,7 +25,7 @@ class CharacterController extends Controller
 
     public function show(string $id)
     {
-        $character = $this->service->getApiCharacterData($id);
+        $character = $this->service->getCharacterData($id);
         return view('character-profile', ['character' => $character]);
     }
     
@@ -39,8 +39,4 @@ class CharacterController extends Controller
         ]);
     }
 
-    public function getApiCharacterData($id = null)
-    {
-        return $this->service->getData($id);
-    }
 }
