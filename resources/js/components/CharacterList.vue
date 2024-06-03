@@ -1,8 +1,6 @@
 <template>
     <div class="container">
-        
         <div class="row">
-
             <div class="col-md-4" v-for="character in characters" :key="character.id">
                 <div class="card mb-4">
                     <img :src="character.image" class="card-img-top" :alt="character.name">
@@ -25,13 +23,18 @@
 import axios from 'axios';
 
 export default {
-
+    props: {
+        initialCharacters: {
+            type: Array,
+            required: true
+        }
+    },
     data() {
         return {
-            characters: [],
+            characters: [...this.initialCharacters], // Spread the initial characters to ensure it's an array
             loading: false,
             page: 1,
-            perPage: 5
+            perPage: 10
         };
     },
     mounted() {
@@ -40,11 +43,6 @@ export default {
     beforeDestroy() {
         window.removeEventListener('scroll', this.handleScroll);
     },
-
-    computed() {
-
-    },
-
     methods: {
         loadCharacters() {
             if (this.loading) return;
@@ -55,13 +53,9 @@ export default {
                     page: this.page,
                     perPage: this.perPage
                 }
-
             }).then(response => {
-                console.log(response);
-
                 if (response.data.characters && Array.isArray(response.data.characters)) {
-
-                    this.characters = this.characters.concat(response.data.characters); // Use concat to merge arrays
+                    this.characters = this.characters.concat(response.data.characters); // Correct concatenation
                     this.page++;
                     this.loading = false;
                 }
@@ -78,7 +72,6 @@ export default {
     }
 };
 </script>
-
 
 <style scoped>
 .container {
@@ -104,14 +97,7 @@ export default {
     color: #6c757d;
 }
 
-h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-}
-
 .text-center {
     margin-top: 1rem;
 }
 </style>
-
-  

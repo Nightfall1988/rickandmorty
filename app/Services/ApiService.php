@@ -15,16 +15,16 @@ class ApiService
        $this->httpClient = new \GuzzleHttp\Client();
     }
 
-    public function getData(Request $request, $id = null)
+    public function getData($request, $id = null)
     {
         $response = $this->httpClient->get($this->url . 'character/' . $id);
-
         $responseData = json_decode($response->getBody(), true);
-
+    
         $page = $request->input('page', 1);
         $perPage = $request->input('perPage', 10);
-        $results = array_slice($responseData, ($page - 1) * $perPage, $perPage);
-
-        return $results;
+        $results = array_slice($responseData['results'], ($page - 1) * $perPage, $perPage);
+    
+        return ['results' => $results];
     }
+    
 }

@@ -15,10 +15,9 @@ class CharacterController extends Controller
     
     public function index()
     {
-        $request = Request::create('/', 'GET'); // Create a new request
-        $characterData = json_decode($this->getInitialData($request)->getContent());
-
-        return view('character-list', ['characters' => json_encode($characterData)]);
+        $request = Request::create('/', 'GET');
+        $characters = $this->getInitialData($request);
+        return view('character-list', ['characters' => $characters->getData(true)['characters']]);
     }
 
     public function show(string $id)
@@ -39,6 +38,7 @@ class CharacterController extends Controller
             'characters' => $results
         ]);
     }
+    
 
     public function getApiCharacterData($id = null)
     {
