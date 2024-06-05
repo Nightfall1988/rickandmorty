@@ -25,8 +25,8 @@ class CharacterController extends Controller
 
     public function show(string $id)
     {
-        $character = $this->service->getCharacterData($id);
-        return view('character-profile', ['character' => $character]);
+        $data = $this->service->getCharacterData($id);
+        return view('character-profile', ['character' => $data[0], 'episodes' =>  $data[1]]);
     }
     
     public function getInitialData(Request $request)

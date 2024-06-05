@@ -27,6 +27,20 @@ class ApiService
     public function getCharacterData($id) 
     {
         $response = $this->httpClient->get($this->url . 'character/' . $id);
-        return json_decode($response->getBody(), true);
+
+        $character = json_decode($response->getBody(), true);
+        $episodes = [];
+
+        foreach ($character['episode'] as $episodeUrl) {
+            $episodes[] = $this->getEpisodeData($episodeUrl);
+        }
+
+        return [$character, $episodes];
+    }
+
+    public function getEpisodeData($episodeUrl) {
+        $response = $this->httpClient->get($episodeUrl);
+        $episode = json_decode($response->getBody(), true);
+        return $episode['name'];
     }
 }
